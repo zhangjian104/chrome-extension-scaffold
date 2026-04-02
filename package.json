@@ -1,0 +1,28 @@
+{
+  "name": "chrome-extension-scaffold",
+  "description": "A Chrome extension scaffold with WXT, Vue 3, and InversifyJS (Dependency Injection)",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "lsof -i :7887 -t | xargs kill -9 2>/dev/null || true; wxt --port 7887",
+    "dev:firefox": "lsof -i :7887 -t | xargs kill -9 2>/dev/null || true; wxt --port 7887 -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "compile": "tsc --noEmit",
+    "postinstall": "wxt prepare"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.1.38",
+    "@wxt-dev/module-vue": "^1.0.3",
+    "typescript": "^5.9.3",
+    "wxt": "^0.20.20"
+  },
+  "dependencies": {
+    "inversify": "^8.1.0",
+    "reflect-metadata": "^0.2.2",
+    "vue": "^3.5.31"
+  }
+}
