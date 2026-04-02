@@ -1,28 +1,31 @@
-import { PageMessageType } from '@/common/types/messages';
+import 'reflect-metadata';
+import { createInjectedContainer } from '@/core/di/container';
+import { SERVICE_IDENTIFIER } from '@/core/di/identifiers';
+import type { Logger } from '@/common/logger';
+import type { IInjectedMessageBridgeService } from '@/services/injected/message-bridge/interface';
+import type { ILifecycleService } from '@/services/common/lifecycle/interface';
+import { LifecycleState } from '@/common/types/lifecycle';
 
 export default defineContentScript({
   matches: ['*://*.reddit.com/*'],
   world: 'MAIN',
   main() {
-    console.log('[Injected] Main world script ready. Waiting for events...');
+    // 1. 实例化 Injected (主世界) 隔离容器
+    const container = createInjectedContainer();
+    const logger = container.get<Logger>(SERVICE_IDENTIFIER.Logger);
+    const messageBridge = container.get<IInjectedMessageBridgeService>(SERVICE_IDENTIFIER.InjectedMessageBridge);
+    const lifecycle = container.get<ILifecycleService>(SERVICE_IDENTIFIER.LifecycleService);
 
-    // 监听隔离世界通过 window.postMessage 传来的探针消息
-    window.addEventListener('message', (event) => {
-      // 过滤非本窗口的闲杂消息
-      if (event.source !== window) return;
+    lifecycle.setState(LifecycleState.INITIALIZING);
+    logger.info('Main world script initializing...');
 
-      if (event.data?.type === PageMessageType.EXT_PING) {
-        const payload = event.data.payload;
-        console.log('[Injected] 收到隔离世界发来的探针数据:', payload);
+    // 2. 启动消息桥接监听
+    messageBridge.startListening();
 
-        // 强行挂载全局变量到主世界的 window (这是突破隔离的核心目的)
-        (window as any).__MY_EXT_HACK__ = payload;
-        
-        console.log(`[Injected] 已经将数据挂载到 window.__MY_EXT_HACK__! 你可以在控制台里输入 window.__MY_EXT_HACK__ 试试。`);
+    lifecycle.setState(LifecycleState.REGISTERED);
 
-        // 将成功信息回复给隔离世界
-        window.postMessage({ type: PageMessageType.PAGE_PONG, status: 'success' }, '*');
-      }
-    });
+    // 3. 所有准备工作完毕，切换为 READY
+    // 此时 InjectedLifecycleService 内部会自动向 Content Script 广播自己已就绪
+    lifecycle.setState(LifecycleState.READY);
   },
 });
