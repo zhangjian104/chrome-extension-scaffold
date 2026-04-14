@@ -28,6 +28,23 @@ export class InjectedMessageBridgeService implements IInjectedMessageBridgeServi
   private handleMessage(event: MessageEvent): void {
     if (event.source !== window) return;
 
+    if (event.data?.type === PageMessageType.REQ_CHECK_PAGE) {
+      const fileInfo = (window as any).fileInfo;
+      let status: 'supported' | 'unsupported' | 'pending';
+      if (!fileInfo || fileInfo.office_type === undefined) {
+        status = 'pending';
+      } else if (fileInfo.office_type === 'o') {
+        status = 'supported';
+      } else {
+        status = 'unsupported';
+      }
+      window.postMessage({
+        type: PageMessageType.RES_CHECK_PAGE,
+        payload: { status }
+      }, '*');
+      return;
+    }
+
     if (event.data?.type === PageMessageType.REQ_EXPORT_MARKDOWN) {
       this.logger.info('收到导出 Markdown 请求');
       const result = this.kdocExtractor.extract();

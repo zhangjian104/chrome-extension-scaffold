@@ -23,6 +23,21 @@ export default defineContentScript({
     logger.info('Content Script 已挂载。等待指令...');
 
     chrome.runtime.onMessage.addListener((request: ExtensionMessage, sender, sendResponse) => {
+      if (request.action === ExtensionAction.CHECK_PAGE) {
+        (async () => {
+          try {
+            if (lifecycle.getChildState?.('injected') !== LifecycleState.READY) {
+              await lifecycle.waitUntilChild?.('injected', LifecycleState.READY);
+            }
+            const result = await messageBridge.checkPageSupport();
+            sendResponse(result);
+          } catch {
+            sendResponse('pending');
+          }
+        })();
+        return true;
+      }
+
       if (request.action === ExtensionAction.EXPORT_MARKDOWN) {
         logger.info('收到导出 Markdown 指令');
         

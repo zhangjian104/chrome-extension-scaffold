@@ -10,6 +10,30 @@ export class MessageBridgeService implements IMessageBridgeService {
     @inject(SERVICE_IDENTIFIER.Logger) private logger: Logger
   ) {}
 
+  async checkPageSupport(): Promise<'supported' | 'unsupported' | 'pending'> {
+    return new Promise((resolve) => {
+      let timer: ReturnType<typeof setTimeout>;
+
+      const handler = (event: MessageEvent) => {
+        if (event.source !== window) return;
+        if (event.data?.type === PageMessageType.RES_CHECK_PAGE) {
+          window.removeEventListener('message', handler);
+          clearTimeout(timer);
+          const s = event.data.payload?.status;
+          resolve(s === 'supported' || s === 'unsupported' ? s : 'pending');
+        }
+      };
+
+      window.addEventListener('message', handler);
+      window.postMessage({ type: PageMessageType.REQ_CHECK_PAGE }, '*');
+
+      timer = setTimeout(() => {
+        window.removeEventListener('message', handler);
+        resolve('pending');
+      }, 3000);
+    });
+  }
+
   async requestMarkdownFromMain(): Promise<{ markdown?: string | null, error?: string, debug?: any } | null> {
     this.logger.info('准备向 Main 世界请求导出 Markdown');
 
