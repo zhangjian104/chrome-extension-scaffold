@@ -1,10 +1,10 @@
 import { BaseHandler } from './BaseHandler';
 import { KDocNode, ParserContext } from '../types';
-import { KDocParser } from '../KDocParser';
+import type { IKDocParserService } from '../interface';
 
 // 分栏容器，直接降级透传
 export class CircleObjectHandler implements BaseHandler {
-  handle(node: KDocNode, parser: KDocParser, context: ParserContext): string {
+  handle(node: KDocNode, parser: IKDocParserService, context: ParserContext): string {
     if (!node.content) return '';
     return node.content.map(child => parser.renderNode(child)).join('');
   }
@@ -12,7 +12,7 @@ export class CircleObjectHandler implements BaseHandler {
 
 // 嵌套高亮块/引用块，转为 Quote
 export class SubDocHandler implements BaseHandler {
-  handle(node: KDocNode, parser: KDocParser, context: ParserContext): string {
+  handle(node: KDocNode, parser: IKDocParserService, context: ParserContext): string {
     if (!node.content) return '';
     
     // 如果已经在表格内部，不再添加 Quote 前缀，直接穿透返回文本

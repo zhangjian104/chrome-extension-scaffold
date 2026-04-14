@@ -31,7 +31,6 @@ export class InjectedMessageBridgeService implements IInjectedMessageBridgeServi
     if (event.source !== window) return;
 
     if (event.data?.type === PageMessageType.REQ_EXPORT_MARKDOWN) {
-      debugger;
       this.logger.info('========== STEP 1: [InjectedMessageBridge] 主世界收到了导出命令 ==========');
       this.logger.info('收到导出 Markdown 请求');
       const result = this.kdocExtractor.extract();

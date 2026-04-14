@@ -1,10 +1,10 @@
 import { BaseHandler } from './BaseHandler';
 import { KDocNode, ParserContext } from '../types';
-import { KDocParser } from '../KDocParser';
+import type { IKDocParserService } from '../interface';
 import { escapeMarkdown } from '../utils/markdown-utils';
 
 export class TextHandler implements BaseHandler {
-  handle(node: KDocNode, parser: KDocParser, context: ParserContext): string {
+  handle(node: KDocNode, parser: IKDocParserService, context: ParserContext): string {
     let text = node.text || '';
     if (!text) return '';
 
@@ -31,13 +31,13 @@ export class TextHandler implements BaseHandler {
 }
 
 export class HardBreakHandler implements BaseHandler {
-  handle(node: KDocNode, parser: KDocParser, context: ParserContext): string {
+  handle(node: KDocNode, parser: IKDocParserService, context: ParserContext): string {
     return '<br/>'; // 考虑到在列表或者其它内联容器中，<br/> 比 \n\n 更稳妥
   }
 }
 
 export class ParagraphHandler implements BaseHandler {
-  handle(node: KDocNode, parser: KDocParser, context: ParserContext): string {
+  handle(node: KDocNode, parser: IKDocParserService, context: ParserContext): string {
     const isList = !!node.attrs?.listType;
     let prefix = '';
 
@@ -69,7 +69,7 @@ export class ParagraphHandler implements BaseHandler {
 }
 
 export class HeadingHandler implements BaseHandler {
-  handle(node: KDocNode, parser: KDocParser, context: ParserContext): string {
+  handle(node: KDocNode, parser: IKDocParserService, context: ParserContext): string {
     let contentStr = '';
     if (node.content) {
       contentStr = node.content.map(child => parser.renderNode(child)).join('');

@@ -1,9 +1,9 @@
 import { BaseHandler } from './BaseHandler';
 import { KDocNode, ParserContext } from '../types';
-import { KDocParser } from '../KDocParser';
+import type { IKDocParserService } from '../interface';
 
 export class CodeBlockHandler implements BaseHandler {
-  handle(node: KDocNode, parser: KDocParser, context: ParserContext): string {
+  handle(node: KDocNode, parser: IKDocParserService, context: ParserContext): string {
     const lang = node.attrs?.lang || '';
     let codeStr = '';
     if (node.content) {
@@ -31,7 +31,7 @@ export class CodeBlockHandler implements BaseHandler {
 }
 
 export class PictureHandler implements BaseHandler {
-  handle(node: KDocNode, parser: KDocParser, context: ParserContext): string {
+  handle(node: KDocNode, parser: IKDocParserService, context: ParserContext): string {
     const attrs = node.attrs || {};
     const title = attrs.caption || attrs.title || '';
     const src = attrs.src || attrs.href || ''; 
@@ -42,7 +42,7 @@ export class PictureHandler implements BaseHandler {
 }
 
 export class LinkViewHandler implements BaseHandler {
-  handle(node: KDocNode, parser: KDocParser, context: ParserContext): string {
+  handle(node: KDocNode, parser: IKDocParserService, context: ParserContext): string {
     const attrs = node.attrs || {};
     const title = attrs.hrefTitle || attrs.description || '';
     const url = attrs.url || '';
@@ -52,7 +52,7 @@ export class LinkViewHandler implements BaseHandler {
 }
 
 export class EmojiHandler implements BaseHandler {
-  handle(node: KDocNode, parser: KDocParser, context: ParserContext): string {
+  handle(node: KDocNode, parser: IKDocParserService, context: ParserContext): string {
     return node.attrs?.emoji || '';
   }
 }

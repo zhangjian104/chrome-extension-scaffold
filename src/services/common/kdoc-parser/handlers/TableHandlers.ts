@@ -1,9 +1,9 @@
 import { BaseHandler } from './BaseHandler';
 import { KDocNode, ParserContext } from '../types';
-import { KDocParser } from '../KDocParser';
+import type { IKDocParserService } from '../interface';
 
 export class TableHandler implements BaseHandler {
-  handle(node: KDocNode, parser: KDocParser, context: ParserContext): string {
+  handle(node: KDocNode, parser: IKDocParserService, context: ParserContext): string {
     if (!node.content || node.content.length === 0) return '';
 
     // 通知内部组件现在处于表格上下文中，比如影响换行策略
@@ -34,7 +34,7 @@ export class TableHandler implements BaseHandler {
 }
 
 export class TableRowHandler implements BaseHandler {
-  handle(node: KDocNode, parser: KDocParser, context: ParserContext): string {
+  handle(node: KDocNode, parser: IKDocParserService, context: ParserContext): string {
     if (!node.content || node.content.length === 0) return '';
 
     const cells = node.content.map(child => parser.renderNode(child).trim());
@@ -43,7 +43,7 @@ export class TableRowHandler implements BaseHandler {
 }
 
 export class TableCellHandler implements BaseHandler {
-  handle(node: KDocNode, parser: KDocParser, context: ParserContext): string {
+  handle(node: KDocNode, parser: IKDocParserService, context: ParserContext): string {
     if (!node.content || node.content.length === 0) return '';
 
     // 由于金山的单元格也是用 block 嵌套出来的，渲染后可能带有很多换行

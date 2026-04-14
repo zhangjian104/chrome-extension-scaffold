@@ -1,6 +1,6 @@
 import { KDocNode, ParserContext } from '../types';
-import { KDocParser } from '../KDocParser';
+import type { IKDocParserService } from '../interface';
 
 export interface BaseHandler {
-  handle(node: KDocNode, parser: KDocParser, context: ParserContext): string;
+  handle(node: KDocNode, parser: IKDocParserService, context: ParserContext): string;
 }
