@@ -7,6 +7,10 @@ export class Logger {
     console.log(`${this.prefix}[${this.context}]`, ...args);
   }
 
+  warn(...args: any[]) {
+    console.warn(`${this.prefix}[${this.context}]`, ...args);
+  }
+
   error(...args: any[]) {
     console.error(`${this.prefix}[${this.context}]`, ...args);
   }
