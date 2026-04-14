@@ -7,7 +7,7 @@ import type { ILifecycleService } from '@/services/common/lifecycle/interface';
 import { LifecycleState } from '@/common/types/lifecycle';
 
 export default defineContentScript({
-  matches: ['*://*.reddit.com/*'],
+  matches: ['*://*.reddit.com/*', '*://*.kdocs.cn/*'],
   world: 'MAIN',
   main() {
     // 1. 实例化 Injected (主世界) 隔离容器

@@ -15,10 +15,14 @@ import { DomOverlayService } from '@/services/content/dom-overlay';
 import type { IDomOverlayService } from '@/services/content/dom-overlay/interface';
 import { MessageBridgeService } from '@/services/content/message-bridge';
 import type { IMessageBridgeService } from '@/services/content/message-bridge/interface';
+import { DownloaderService } from '@/services/content/downloader';
+import type { IDownloaderService } from '@/services/content/downloader/interface';
 
 // 导入 Injected 模块的实现
 import { InjectedMessageBridgeService } from '@/services/injected/message-bridge';
 import type { IInjectedMessageBridgeService } from '@/services/injected/message-bridge/interface';
+import { KDocExtractorService } from '@/services/injected/kdoc-extractor';
+import type { IKDocExtractorService } from '@/services/injected/kdoc-extractor/interface';
 
 // 导入 Lifecycle 模块的实现
 import { BackgroundLifecycleService } from '@/services/worker/lifecycle';
@@ -53,6 +57,7 @@ export function createContentContainer(): Container {
   const container = createBaseContainer('Content');
   container.bind<IDomOverlayService>(SERVICE_IDENTIFIER.DomOverlay).to(DomOverlayService).inSingletonScope();
   container.bind<IMessageBridgeService>(SERVICE_IDENTIFIER.MessageBridge).to(MessageBridgeService).inSingletonScope();
+  container.bind<IDownloaderService>(SERVICE_IDENTIFIER.Downloader).to(DownloaderService).inSingletonScope();
   container.bind<ILifecycleService>(SERVICE_IDENTIFIER.LifecycleService).to(ContentLifecycleService).inSingletonScope();
   return container;
 }
@@ -66,6 +71,7 @@ export function createPopupContainer(): Container {
 export function createInjectedContainer(): Container {
   const container = createCoreContainer('Injected');
   container.bind<IInjectedMessageBridgeService>(SERVICE_IDENTIFIER.InjectedMessageBridge).to(InjectedMessageBridgeService).inSingletonScope();
+  container.bind<IKDocExtractorService>(SERVICE_IDENTIFIER.KDocExtractor).to(KDocExtractorService).inSingletonScope();
   container.bind<ILifecycleService>(SERVICE_IDENTIFIER.LifecycleService).to(InjectedLifecycleService).inSingletonScope();
   return container;
 }
