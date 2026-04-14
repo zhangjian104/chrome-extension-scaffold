@@ -8,13 +8,7 @@ import type { IStorageService } from '@/services/common/storage/interface';
 import { KDocParserService } from '@/services/common/kdoc-parser';
 import type { IKDocParserService } from '@/services/common/kdoc-parser/interface';
 
-// 导入 Worker 模块的实现
-import { TabManagerService } from '@/services/worker/tab-manager';
-import type { ITabManagerService } from '@/services/worker/tab-manager/interface';
-
 // 导入 Content 模块的实现
-import { DomOverlayService } from '@/services/content/dom-overlay';
-import type { IDomOverlayService } from '@/services/content/dom-overlay/interface';
 import { MessageBridgeService } from '@/services/content/message-bridge';
 import type { IMessageBridgeService } from '@/services/content/message-bridge/interface';
 import { DownloaderService } from '@/services/content/downloader';
@@ -47,10 +41,9 @@ export function createBaseContainer(contextName: string): Container {
   return container;
 }
 
-// 后台容器，叠加 Worker 服务
+// 后台容器
 export function createWorkerContainer(): Container {
   const container = createBaseContainer('Background');
-  container.bind<ITabManagerService>(SERVICE_IDENTIFIER.TabManager).to(TabManagerService).inSingletonScope();
   container.bind<ILifecycleService>(SERVICE_IDENTIFIER.LifecycleService).to(BackgroundLifecycleService).inSingletonScope();
   return container;
 }
@@ -58,7 +51,6 @@ export function createWorkerContainer(): Container {
 // 隔离脚本容器，叠加 Content 服务
 export function createContentContainer(): Container {
   const container = createBaseContainer('Content');
-  container.bind<IDomOverlayService>(SERVICE_IDENTIFIER.DomOverlay).to(DomOverlayService).inSingletonScope();
   container.bind<IMessageBridgeService>(SERVICE_IDENTIFIER.MessageBridge).to(MessageBridgeService).inSingletonScope();
   container.bind<IDownloaderService>(SERVICE_IDENTIFIER.Downloader).to(DownloaderService).inSingletonScope();
   container.bind<ILifecycleService>(SERVICE_IDENTIFIER.LifecycleService).to(ContentLifecycleService).inSingletonScope();
