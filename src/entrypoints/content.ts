@@ -53,7 +53,7 @@ export default defineContentScript({
 
             if (result && result.markdown) {
               logger.info('成功获取 Markdown 数据，准备下载...');
-              const title = document.title || 'kdoc-export';
+              const title = document.title || 'docmd-export';
               downloader.downloadStringAsFile(result.markdown, `${title}.md`);
               sendResponse(true);
             } else if (result && result.error) {

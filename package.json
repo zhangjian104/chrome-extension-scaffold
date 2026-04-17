@@ -1,8 +1,8 @@
 {
-  "name": "chrome-extension-scaffold",
-  "description": "A Chrome extension scaffold with WXT, Vue 3, and InversifyJS (Dependency Injection)",
+  "name": "docmd",
+  "description": "智能文档一键转 Markdown，当前支持金山文档",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "lsof -i :7887 -t | xargs kill -9 2>/dev/null || true; wxt --port 7887",

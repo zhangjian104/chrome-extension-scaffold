@@ -7,6 +7,8 @@ import { StorageService } from '@/services/common/storage';
 import type { IStorageService } from '@/services/common/storage/interface';
 import { KDocParserService } from '@/services/common/kdoc-parser';
 import type { IKDocParserService } from '@/services/common/kdoc-parser/interface';
+import { ClaudeService } from '@/services/common/claude';
+import type { IClaudeService } from '@/services/common/claude/interface';
 
 // 导入 Content 模块的实现
 import { MessageBridgeService } from '@/services/content/message-bridge';
@@ -31,6 +33,7 @@ export function createCoreContainer(contextName: string): Container {
   const container = new Container();
   container.bind<Logger>(SERVICE_IDENTIFIER.Logger).toConstantValue(new Logger(contextName));
   container.bind<IKDocParserService>(SERVICE_IDENTIFIER.KDocParser).to(KDocParserService).inSingletonScope();
+  container.bind<IClaudeService>(SERVICE_IDENTIFIER.Claude).to(ClaudeService).inSingletonScope();
   return container;
 }
 

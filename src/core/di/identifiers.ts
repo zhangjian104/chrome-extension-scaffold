@@ -6,5 +6,6 @@ export const SERVICE_IDENTIFIER = {
   InjectedMessageBridge: Symbol.for('InjectedMessageBridge'),
   KDocParser: Symbol.for('KDocParser'),
   KDocExtractor: Symbol.for('KDocExtractor'),
+  Claude: Symbol.for('Claude'),
   LifecycleService: Symbol.for('LifecycleService'),
 };

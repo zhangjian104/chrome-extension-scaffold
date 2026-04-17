@@ -3,16 +3,10 @@
     <!-- 头部 -->
     <header class="popup__header">
       <div class="popup__brand">
-        <svg class="popup__logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="16" y1="13" x2="8" y2="13"/>
-          <line x1="16" y1="17" x2="8" y2="17"/>
-          <polyline points="10 9 9 9 8 9"/>
-        </svg>
-        <h1 class="popup__title">KDoc Exporter</h1>
+        <img class="popup__logo" :src="logoUrl" alt="DocMD" />
+        <h1 class="popup__title">DocMD</h1>
       </div>
-      <p class="popup__subtitle">金山文档 Markdown 导出工具</p>
+      <p class="popup__subtitle">智能文档一键转 Markdown</p>
     </header>
 
     <!-- 主操作区 -->
@@ -103,6 +97,8 @@ import { SERVICE_IDENTIFIER } from '@/core/di/identifiers';
 import type { Logger } from '@/common/logger';
 
 const logger = useInject<Logger>(SERVICE_IDENTIFIER.Logger);
+
+const logoUrl = chrome.runtime.getURL('icons/icon-32.png');
 
 const isTargetPage = ref(false);
 const isChecking = ref(true);
@@ -240,14 +236,14 @@ const exportMarkdown = async () => {
 
 <style scoped>
 .popup {
-  --color-primary: #0891B2;
-  --color-cta: #0D9488;
-  --color-cta-hover: #0F766E;
-  --color-bg: #F0FDFA;
+  --color-primary: #7C3AED;
+  --color-cta: #7C3AED;
+  --color-cta-hover: #6D28D9;
+  --color-bg: #FAF5FF;
   --color-surface: #FFFFFF;
-  --color-text: #134E4A;
-  --color-text-secondary: #5F7B7A;
-  --color-border: #CCFBF1;
+  --color-text: #2E1065;
+  --color-text-secondary: #6B7280;
+  --color-border: #EDE9FE;
   --color-error: #DC2626;
   --color-error-bg: #FEF2F2;
   --color-success: #16A34A;
@@ -283,8 +279,8 @@ const exportMarkdown = async () => {
 .popup__logo {
   width: 22px;
   height: 22px;
-  color: var(--color-primary);
   flex-shrink: 0;
+  border-radius: 4px;
 }
 
 .popup__title {
@@ -328,7 +324,7 @@ const exportMarkdown = async () => {
 
 .btn-export:hover:not(:disabled) {
   background: var(--color-cta-hover);
-  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.3);
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
 }
 
 .btn-export:active:not(:disabled) {
@@ -336,7 +332,7 @@ const exportMarkdown = async () => {
 }
 
 .btn-export:focus-visible {
-  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.4);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.4);
 }
 
 .btn-export:disabled {
